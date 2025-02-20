@@ -13,7 +13,11 @@ public class PaymentEventServiceImpl {
 
 
 
-    private static class PaymentOrderExecutor {
+    private class PaymentOrderExecutor {
 
+        public String tryPayment() {
+
+            return "redirect PSP Payment Page URL";
+        }
     }
 }
