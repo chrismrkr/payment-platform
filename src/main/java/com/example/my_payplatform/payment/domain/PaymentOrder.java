@@ -9,19 +9,20 @@ import lombok.Getter;
 @Getter
 public class PaymentOrder {
     private final String paymentOrderId;
-    private final String buyerAccount;
+    private final String sellerInfo;
     private final String amount;
     private final String currency;
-    private final PaymentEvent paymentEvent;
     private PaymentOrderStatus paymentOrderStatus;
     private boolean ledgerUpdated;
     private boolean walletUpdated;
     private String paymentToken;
 
+    private final PaymentEvent paymentEvent;
+
     @Builder
-    public PaymentOrder(String paymentOrderId, String buyerAccount, String amount, String currency, PaymentEvent paymentEvent, PaymentOrderStatus paymentOrderStatus, boolean ledgerUpdated, boolean walletUpdated, String paymentToken) {
+    public PaymentOrder(String paymentOrderId, String sellerInfo, String amount, String currency, PaymentEvent paymentEvent, PaymentOrderStatus paymentOrderStatus, boolean ledgerUpdated, boolean walletUpdated, String paymentToken) {
         this.paymentOrderId = paymentOrderId;
-        this.buyerAccount = buyerAccount;
+        this.sellerInfo = sellerInfo;
         this.amount = amount;
         this.currency = currency;
         this.paymentEvent = paymentEvent;
@@ -34,7 +35,7 @@ public class PaymentOrder {
     public static PaymentOrder from(PaymentOrderEntity entity) {
         return PaymentOrder.builder()
                 .paymentOrderId(entity.getPaymentOrderId())
-                .buyerAccount(entity.getBuyerAccount())
+                .sellerInfo(entity.getSellerInfo())
                 .amount(entity.getAmount())
                 .currency(entity.getCurrency())
                 .paymentEvent(PaymentEvent.from(
@@ -49,7 +50,7 @@ public class PaymentOrder {
     public PaymentOrderEntity toEntity() {
         return PaymentOrderEntity.builder()
                 .paymentOrderId(this.getPaymentOrderId())
-                .buyerAccount(this.getBuyerAccount())
+                .sellerInfo(this.getSellerInfo())
                 .amount(this.getAmount())
                 .currency(this.getCurrency())
                 .paymentEventEntity(this.getPaymentEvent().toEntity())

@@ -7,8 +7,7 @@ import lombok.*;
 @Getter
 public class PaymentOrderReqDto {
     private String paymentOrderId; // 멱등키
-
-    private String sellerAccount; // 판매 대행사(페이 플랫폼)
+    private String sellerAccount;
     private String amount;
     private String currency;
 

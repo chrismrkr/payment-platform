@@ -14,7 +14,6 @@ public class PaymentEventEntity {
     @Column(name = "checkout_id")
     private final String checkoutId;
     private final String buyerInfo;
-    private final String sellerInfo;
     private final String creditCardInfo;
     private boolean isPaymentDone;
 
@@ -22,10 +21,9 @@ public class PaymentEventEntity {
     private Set<PaymentOrderEntity> paymentOrderEntities = new HashSet<>();
 
     @Builder
-    public PaymentEventEntity(String checkoutId, String buyerInfo, String sellerInfo, String creditCardInfo, boolean isPaymentDone) {
+    public PaymentEventEntity(String checkoutId, String buyerInfo, String creditCardInfo, boolean isPaymentDone) {
         this.checkoutId = checkoutId;
         this.buyerInfo = buyerInfo;
-        this.sellerInfo = sellerInfo;
         this.creditCardInfo = creditCardInfo;
         this.isPaymentDone = isPaymentDone;
     }

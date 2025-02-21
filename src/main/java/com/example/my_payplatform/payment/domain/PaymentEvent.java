@@ -8,14 +8,12 @@ import lombok.Getter;
 public class PaymentEvent {
     private final String checkoutId;
     private final String buyerInfo;
-    private final String sellerInfo;
     private final String creditCardInfo;
     private boolean isPaymentDone;
     @Builder
-    public PaymentEvent(String checkoutId, String buyerInfo, String sellerInfo, String creditCardInfo, boolean isPaymentDone) {
+    public PaymentEvent(String checkoutId, String buyerInfo, String creditCardInfo, boolean isPaymentDone) {
         this.checkoutId = checkoutId;
         this.buyerInfo = buyerInfo;
-        this.sellerInfo = sellerInfo;
         this.creditCardInfo = creditCardInfo;
         this.isPaymentDone = isPaymentDone;
     }
@@ -24,7 +22,6 @@ public class PaymentEvent {
         return PaymentEvent.builder()
                 .checkoutId(entity.getCheckoutId())
                 .buyerInfo(entity.getBuyerInfo())
-                .sellerInfo(entity.getSellerInfo())
                 .creditCardInfo(entity.getCreditCardInfo())
                 .isPaymentDone(entity.isPaymentDone())
                 .build();
@@ -33,7 +30,6 @@ public class PaymentEvent {
         return PaymentEventEntity.builder()
                 .checkoutId(this.getCheckoutId())
                 .buyerInfo(this.getBuyerInfo())
-                .sellerInfo(this.getSellerInfo())
                 .creditCardInfo(this.getCreditCardInfo())
                 .isPaymentDone(this.isPaymentDone())
                 .build();

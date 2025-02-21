@@ -13,7 +13,7 @@ public class PaymentOrderEntity {
     @Id
     @Column(name = "payment_order_id")
     private final String paymentOrderId;
-    private final String buyerAccount;
+    private final String sellerInfo;
     private final String amount;
     private final String currency;
 
@@ -29,9 +29,9 @@ public class PaymentOrderEntity {
     private String paymentToken;
 
     @Builder
-    public PaymentOrderEntity(String paymentOrderId, String buyerAccount, String amount, String currency, PaymentEventEntity paymentEventEntity, PaymentOrderStatus paymentOrderStatus, boolean ledgerUpdated, boolean walletUpdated, String paymentToken) {
+    public PaymentOrderEntity(String paymentOrderId, String sellerInfo, String amount, String currency, PaymentEventEntity paymentEventEntity, PaymentOrderStatus paymentOrderStatus, boolean ledgerUpdated, boolean walletUpdated, String paymentToken) {
         this.paymentOrderId = paymentOrderId;
-        this.buyerAccount = buyerAccount;
+        this.sellerInfo = sellerInfo;
         this.amount = amount;
         this.currency = currency;
         this.paymentEventEntity = paymentEventEntity;
