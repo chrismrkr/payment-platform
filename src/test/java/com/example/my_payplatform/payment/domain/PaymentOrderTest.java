@@ -25,7 +25,6 @@ public class PaymentOrderTest {
                 .paymentOrderStatus(PaymentOrderStatus.NOT_STARTED)
                 .ledgerUpdated(false)
                 .walletUpdated(false)
-                .paymentToken("1234")
                 .build();
         // when
         PaymentOrderEntity entity = paymentOrder.toEntity();
@@ -37,7 +36,6 @@ public class PaymentOrderTest {
         Assertions.assertEquals(entity.getPaymentOrderStatus(), PaymentOrderStatus.NOT_STARTED);
         Assertions.assertEquals(entity.isLedgerUpdated(), false);
         Assertions.assertEquals(entity.isWalletUpdated(), false);
-        Assertions.assertEquals(entity.getPaymentToken(), "1234");
         Assertions.assertEquals(entity.getPaymentEventEntity().getBuyerInfo(), "0000");
     }
     @Test
@@ -57,7 +55,6 @@ public class PaymentOrderTest {
                 .paymentOrderStatus(PaymentOrderStatus.NOT_STARTED)
                 .ledgerUpdated(false)
                 .walletUpdated(false)
-                .paymentToken("1234")
                 .build();
         // when
         PaymentOrder paymentOrder = PaymentOrder.from(paymentOrderEntity);
@@ -69,7 +66,6 @@ public class PaymentOrderTest {
         Assertions.assertEquals(paymentOrder.getPaymentOrderStatus(), PaymentOrderStatus.NOT_STARTED);
         Assertions.assertEquals(paymentOrder.isLedgerUpdated(), false);
         Assertions.assertEquals(paymentOrder.isWalletUpdated(), false);
-        Assertions.assertEquals(paymentOrder.getPaymentToken(), "1234");
         Assertions.assertEquals(paymentOrder.getPaymentEvent().getBuyerInfo(), "0000");
     }
 }

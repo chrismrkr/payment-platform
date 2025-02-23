@@ -26,10 +26,9 @@ public class PaymentOrderEntity {
     private boolean ledgerUpdated;
     private boolean walletUpdated;
 
-    private String paymentToken;
 
     @Builder
-    public PaymentOrderEntity(String paymentOrderId, String sellerInfo, String amount, String currency, PaymentEventEntity paymentEventEntity, PaymentOrderStatus paymentOrderStatus, boolean ledgerUpdated, boolean walletUpdated, String paymentToken) {
+    public PaymentOrderEntity(String paymentOrderId, String sellerInfo, String amount, String currency, PaymentEventEntity paymentEventEntity, PaymentOrderStatus paymentOrderStatus, boolean ledgerUpdated, boolean walletUpdated) {
         this.paymentOrderId = paymentOrderId;
         this.sellerInfo = sellerInfo;
         this.amount = amount;
@@ -38,6 +37,5 @@ public class PaymentOrderEntity {
         this.paymentOrderStatus = paymentOrderStatus;
         this.ledgerUpdated = ledgerUpdated;
         this.walletUpdated = walletUpdated;
-        this.paymentToken = paymentToken;
     }
 }

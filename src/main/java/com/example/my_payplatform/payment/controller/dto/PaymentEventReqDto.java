@@ -4,28 +4,32 @@ import lombok.*;
 
 import java.util.List;
 
-@Data
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class PaymentEventReqDto {
     @Setter
     private String checkoutId;
     private String buyerInfo; // 소비자
-    private String creditCardOInfo; // PSP(카드사) 관련 정보
+    private String creditCardInfo; // PSP(카드사) 관련 정보
+    private String buyerAccount;
 
     private List<PaymentOrderInfo> paymentOrderInfos;
 
     @Builder
-    public PaymentEventReqDto(String buyerInfo, String creditCardOInfo, List<PaymentOrderInfo> paymentOrderInfos) {
+    public PaymentEventReqDto(String buyerInfo, String creditCardInfo, String buyerAccount, List<PaymentOrderInfo> paymentOrderInfos) {
         this.buyerInfo = buyerInfo;
-        this.creditCardOInfo = creditCardOInfo;
+        this.creditCardInfo = creditCardInfo;
+        this.buyerAccount = buyerAccount;
         this.paymentOrderInfos = paymentOrderInfos;
     }
 
-    @Data
+
     @NoArgsConstructor
     @Getter
-    private static class PaymentOrderInfo {
+    public static class PaymentOrderInfo {
+        @Setter
+        private String paymentOrderId;
         private String sellerInfo; // 판매자
         private String amount;
         private String currency;

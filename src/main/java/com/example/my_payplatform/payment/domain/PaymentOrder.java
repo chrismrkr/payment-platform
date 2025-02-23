@@ -15,12 +15,20 @@ public class PaymentOrder {
     private PaymentOrderStatus paymentOrderStatus;
     private boolean ledgerUpdated;
     private boolean walletUpdated;
-    private String paymentToken;
 
     private final PaymentEvent paymentEvent;
 
+    public void changeStatus(PaymentOrderStatus status) {
+        this.paymentOrderStatus = status;
+    }
+    public void successLedgerUpdate() {
+        this.ledgerUpdated = true;
+    }
+    public void successWalletUpdate() {
+        this.walletUpdated = true;
+    }
     @Builder
-    public PaymentOrder(String paymentOrderId, String sellerInfo, String amount, String currency, PaymentEvent paymentEvent, PaymentOrderStatus paymentOrderStatus, boolean ledgerUpdated, boolean walletUpdated, String paymentToken) {
+    public PaymentOrder(String paymentOrderId, String sellerInfo, String amount, String currency, PaymentEvent paymentEvent, PaymentOrderStatus paymentOrderStatus, boolean ledgerUpdated, boolean walletUpdated) {
         this.paymentOrderId = paymentOrderId;
         this.sellerInfo = sellerInfo;
         this.amount = amount;
@@ -29,7 +37,6 @@ public class PaymentOrder {
         this.paymentOrderStatus = paymentOrderStatus;
         this.ledgerUpdated = ledgerUpdated;
         this.walletUpdated = walletUpdated;
-        this.paymentToken = paymentToken;
     }
 
     public static PaymentOrder from(PaymentOrderEntity entity) {
@@ -44,7 +51,6 @@ public class PaymentOrder {
                 .paymentOrderStatus(entity.getPaymentOrderStatus())
                 .ledgerUpdated(entity.isLedgerUpdated())
                 .walletUpdated(entity.isWalletUpdated())
-                .paymentToken(entity.getPaymentToken())
                 .build();
     }
     public PaymentOrderEntity toEntity() {
@@ -57,7 +63,6 @@ public class PaymentOrder {
                 .paymentOrderStatus(this.getPaymentOrderStatus())
                 .ledgerUpdated(this.isLedgerUpdated())
                 .walletUpdated(this.isWalletUpdated())
-                .paymentToken(this.getPaymentToken())
                 .build();
     }
 }
