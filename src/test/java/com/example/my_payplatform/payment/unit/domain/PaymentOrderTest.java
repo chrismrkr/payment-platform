@@ -1,5 +1,7 @@
-package com.example.my_payplatform.payment.domain;
+package com.example.my_payplatform.payment.unit.domain;
 
+import com.example.my_payplatform.payment.domain.PaymentEvent;
+import com.example.my_payplatform.payment.domain.PaymentOrder;
 import com.example.my_payplatform.payment.domain.status.PaymentOrderStatus;
 import com.example.my_payplatform.payment.infrastructure.entity.PaymentEventEntity;
 import com.example.my_payplatform.payment.infrastructure.entity.PaymentOrderEntity;

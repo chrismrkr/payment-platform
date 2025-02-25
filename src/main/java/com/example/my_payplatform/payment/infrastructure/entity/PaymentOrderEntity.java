@@ -9,17 +9,18 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PaymentOrderEntity {
     @Id
     @Column(name = "payment_order_id")
-    private final String paymentOrderId;
-    private final String sellerInfo;
-    private final String amount;
-    private final String currency;
+    private String paymentOrderId;
+    private String sellerInfo;
+    private String amount;
+    private String currency;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "payment_event_id")
-    private final PaymentEventEntity paymentEventEntity;
+    private PaymentEventEntity paymentEventEntity;
 
     @Enumerated(EnumType.STRING)
     private PaymentOrderStatus paymentOrderStatus;
@@ -28,7 +29,7 @@ public class PaymentOrderEntity {
 
 
     @Builder
-    public PaymentOrderEntity(String paymentOrderId, String sellerInfo, String amount, String currency, PaymentEventEntity paymentEventEntity, PaymentOrderStatus paymentOrderStatus, boolean ledgerUpdated, boolean walletUpdated) {
+    private PaymentOrderEntity(String paymentOrderId, String sellerInfo, String amount, String currency, PaymentEventEntity paymentEventEntity, PaymentOrderStatus paymentOrderStatus, boolean ledgerUpdated, boolean walletUpdated) {
         this.paymentOrderId = paymentOrderId;
         this.sellerInfo = sellerInfo;
         this.amount = amount;

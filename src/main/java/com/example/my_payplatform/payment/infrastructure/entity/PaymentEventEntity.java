@@ -1,20 +1,23 @@
 package com.example.my_payplatform.payment.infrastructure.entity;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PaymentEventEntity {
     @Id
     @Column(name = "checkout_id")
-    private final String checkoutId;
-    private final String buyerInfo;
-    private final String creditCardInfo;
+    private String checkoutId;
+    private String buyerInfo;
+    private String creditCardInfo;
     private boolean isPaymentDone;
     private String paymentToken;
 
@@ -22,7 +25,7 @@ public class PaymentEventEntity {
     private Set<PaymentOrderEntity> paymentOrderEntities = new HashSet<>();
 
     @Builder
-    public PaymentEventEntity(String checkoutId, String buyerInfo, String creditCardInfo, boolean isPaymentDone, String paymentToken) {
+    private PaymentEventEntity(String checkoutId, String buyerInfo, String creditCardInfo, boolean isPaymentDone, String paymentToken) {
         this.checkoutId = checkoutId;
         this.buyerInfo = buyerInfo;
         this.creditCardInfo = creditCardInfo;

@@ -65,7 +65,7 @@ public class DefaultPaymentEventService implements PaymentEventService {
                 .creditCardInfo(dto.getCreditCardInfo())
                 .isPaymentDone(false)
                 .build();
-        return paymentEventRepository.save(paymentEvent);
+        return paymentEventRepository.persist(paymentEvent);
     }
 
     private PaymentOrder persistPaymentOrder(PaymentEventReqDto.PaymentOrderInfo paymentOrderInfo, PaymentEvent paymentEvent) {
@@ -79,7 +79,7 @@ public class DefaultPaymentEventService implements PaymentEventService {
                 .walletUpdated(false)
                 .paymentEvent(paymentEvent)
                 .build();
-        paymentOrder = paymentOrderRepository.save(paymentOrder);
+        paymentOrder = paymentOrderRepository.persist(paymentOrder);
         return paymentOrder;
     }
 
