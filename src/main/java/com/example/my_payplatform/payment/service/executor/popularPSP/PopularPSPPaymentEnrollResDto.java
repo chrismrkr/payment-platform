@@ -9,4 +9,8 @@ import lombok.NoArgsConstructor;
 public class PopularPSPPaymentEnrollResDto {
     private String resultCode;
     private String paymentToken;
+    public PopularPSPPaymentEnrollResDto(String resultCode, String paymentToken) {
+        this.resultCode = resultCode;
+        this.paymentToken = paymentToken;
+    }
 }

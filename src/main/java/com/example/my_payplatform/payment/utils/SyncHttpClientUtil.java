@@ -8,10 +8,10 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 
-@Component
-@RequiredArgsConstructor
+//@Component
+//@RequiredArgsConstructor
 public class SyncHttpClientUtil implements HttpClientUtil {
-    private final RestTemplate restTemplate;
+    private final RestTemplate restTemplate = new RestTemplate();
     @Override
     public <T> ResponseEntity<T> get(String url, Class<T> responseType, Map<String, String> headers, MediaType mediaType) {
         HttpEntity<String> entity = new HttpEntity<>(buildHeaders(headers, mediaType));
@@ -32,6 +32,7 @@ public class SyncHttpClientUtil implements HttpClientUtil {
             throw new RuntimeException("POST 요청 실패: " + e.getMessage(), e);
         }
     }
+
 
     private HttpHeaders buildHeaders(Map<String, String> headers, MediaType mediaType) {
         HttpHeaders httpHeaders = new HttpHeaders();

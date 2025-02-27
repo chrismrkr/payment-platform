@@ -1,8 +1,10 @@
 package com.example.my_payplatform.payment.service.impl;
 
 import com.example.my_payplatform.payment.controller.dto.PaymentEventReqDto;
+import com.example.my_payplatform.payment.controller.dto.PaymentEventWebhookReqDto;
 import com.example.my_payplatform.payment.domain.PaymentEvent;
 import com.example.my_payplatform.payment.domain.PaymentOrder;
+import com.example.my_payplatform.payment.domain.status.PaymentEventType;
 import com.example.my_payplatform.payment.domain.status.PaymentOrderStatus;
 import com.example.my_payplatform.payment.facade.port.PaymentEventService;
 import com.example.my_payplatform.payment.service.executor.common.dto.PaymentExecuteResponseDto;
@@ -24,9 +26,13 @@ public class DefaultPaymentEventService implements PaymentEventService {
     private final ApplicationContext applicationContext;
 
     @Override
-    @Transactional
-    public void readyPayment(PaymentEventReqDto paymentEventReqDto) {
+    public PaymentEvent readyPaymentEvent(PaymentEventReqDto paymentEventReqDto) {
         PaymentEvent paymentEvent = persistPaymentEvent(paymentEventReqDto);
+        return paymentEvent;
+    }
+
+    @Override
+    public void readyPaymentOrder(PaymentEvent paymentEvent, PaymentEventReqDto paymentEventReqDto) {
         paymentEventReqDto.getPaymentOrderInfos()
                 .forEach(paymentOrderInfo -> {
                     paymentOrderInfo.setPaymentOrderId(UniqueIDGenerator.getId());
@@ -43,7 +49,7 @@ public class DefaultPaymentEventService implements PaymentEventService {
         // 결제 요청
         PaymentExecuteResponseDto paymentEnrollResult = paymentExecutor.enrollPayment(paymentEventReqDto);
 
-        // 상태 변경
+        // 상태 변경(NOT_STARTING -> EXECUTING)
         String paymentEventToken = paymentEnrollResult.getPaymentEventToken();
         String redirectPageUrl = paymentEnrollResult.getRedirectPageUrl();
         paymentEventReqDto.getPaymentOrderInfos().forEach(paymentOrderInfo -> {
@@ -56,6 +62,19 @@ public class DefaultPaymentEventService implements PaymentEventService {
         return redirectPageUrl +
                 "?paymentToken=" +
                 paymentEventToken;
+    }
+
+    @Override
+    @Transactional
+    public void handleWebhook(PaymentEventWebhookReqDto webhookEvent) {
+        String eventType = webhookEvent.getEventType();
+        String paymentToken = webhookEvent.getPaymentToken();
+        PaymentOrderStatus paymentOrderStatus = PaymentOrderStatus.valueOf(webhookEvent.getStatus());
+        if(eventType.equals(PaymentEventType.PAYMENT_STATUS_CHANGED.name())) {
+
+        } else {
+            throw new IllegalArgumentException("Not Supported Event Type: " + eventType);
+        }
     }
 
     private PaymentEvent persistPaymentEvent(PaymentEventReqDto dto) {

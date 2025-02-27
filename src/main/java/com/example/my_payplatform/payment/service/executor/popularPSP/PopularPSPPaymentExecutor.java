@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
@@ -26,15 +27,19 @@ public class PopularPSPPaymentExecutor implements DefaultPaymentEventService.Pay
     public PaymentExecuteResponseDto enrollPayment(PaymentEventReqDto dto) {
         PopularPSPPaymentEnrollReqDto popularPSPPaymentEnrollReqDto = PopularPSPPaymentEnrollReqDto.from(
                                                 dto, environment.getProperty("popularpsp.redirect.url"));
+
         Map<String, String> httpHeader = new HashMap<>();
         httpHeader.put(environment.getProperty("popularpsp.api-server.idempotency-key-name"), dto.getCheckoutId());
+
         ResponseEntity<PopularPSPPaymentEnrollResDto> httpResult = httpClientUtil.post(
                 environment.getProperty("popularpsp.api-server.url"), PopularPSPPaymentEnrollResDto.class,
                 popularPSPPaymentEnrollReqDto,
                 httpHeader, MediaType.APPLICATION_JSON);
 
-
-
-        return null;
+        return PaymentExecuteResponseDto
+                .builder()
+                .paymentEventToken(Objects.requireNonNull(httpResult.getBody()).getPaymentToken())
+                .redirectPageUrl(environment.getProperty("popularpsp.pay-page.url"))
+                .build();
     }
 }
