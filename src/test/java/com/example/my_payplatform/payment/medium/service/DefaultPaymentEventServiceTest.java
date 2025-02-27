@@ -75,4 +75,43 @@ public class DefaultPaymentEventServiceTest {
                 paymentEventRepository.findByCheckoutId("youShouldSetIdempotencyKeyByUUIDGenerator")
                         .getCheckoutId());
     }
+
+    @Test
+    void 결제_이벤트_및_주문_시작() {
+        // given
+        PaymentEventReqDto.PaymentOrderInfo farmerOrderInfo = PaymentEventReqDto.PaymentOrderInfo.builder()
+                .sellerInfo("farmer")
+                .amount("10000")
+                .currency("won")
+                .build();
+        PaymentEventReqDto.PaymentOrderInfo butcherOrderInfo = PaymentEventReqDto.PaymentOrderInfo.builder()
+                .sellerInfo("butcher")
+                .amount("30000")
+                .currency("won")
+                .build();
+        List<PaymentEventReqDto.PaymentOrderInfo> paymentOrderInfoList = new ArrayList<>();
+        paymentOrderInfoList.add(farmerOrderInfo);
+        paymentOrderInfoList.add(butcherOrderInfo);
+        PaymentEventReqDto paymentEventReqDto = PaymentEventReqDto.builder()
+                .buyerInfo("kim")
+                .buyerAccount("123Account321")
+                .creditCardInfo("PopularPSP-code99")
+                .paymentOrderInfos(paymentOrderInfoList)
+                .build();
+        paymentEventReqDto.setCheckoutId("youShouldSetIdempotencyKeyByUUIDGenerator");
+
+        PaymentEvent paymentEvent = defaultPaymentEventService.readyPaymentEvent(paymentEventReqDto);
+        defaultPaymentEventService.readyPaymentOrder(paymentEvent, paymentEventReqDto); // 결제 이벤트 및 주문 준비 완료
+
+        // when
+        String s = defaultPaymentEventService.executePayment(paymentEventReqDto);
+
+        // then
+        Assertions.assertTrue(s.length() > 0);
+    }
+
+    @Test
+    void 결제_이벤트_및_주문_완료_웹훅_처리() {
+
+    }
 }

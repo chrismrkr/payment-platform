@@ -53,6 +53,17 @@ public class PaymentOrder {
                 .walletUpdated(entity.isWalletUpdated())
                 .build();
     }
+    public static PaymentOrder fromWithoutPaymentEvent(PaymentOrderEntity entity) {
+        return PaymentOrder.builder()
+                .paymentOrderId(entity.getPaymentOrderId())
+                .sellerInfo(entity.getSellerInfo())
+                .amount(entity.getAmount())
+                .currency(entity.getCurrency())
+                .paymentOrderStatus(entity.getPaymentOrderStatus())
+                .ledgerUpdated(entity.isLedgerUpdated())
+                .walletUpdated(entity.isWalletUpdated())
+                .build();
+    }
     public PaymentOrderEntity toEntity() {
         return PaymentOrderEntity.builder()
                 .paymentOrderId(this.getPaymentOrderId())

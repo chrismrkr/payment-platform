@@ -24,6 +24,12 @@ public class PaymentOrderRepositoryImpl implements PaymentOrderRepository {
                 .toList();
     }
 
+    public List<PaymentOrder> findByCheckoutIdWithoutPaymentEvent(String checkoutId) {
+        return jpaRepository.findByCheckoutId(checkoutId).stream()
+                .map(PaymentOrder::fromWithoutPaymentEvent)
+                .toList();
+    }
+
     @Override
     public PaymentOrder findByPaymentOrderId(String paymentOrderId) {
         PaymentOrderEntity entity = jpaRepository.findById(paymentOrderId)
