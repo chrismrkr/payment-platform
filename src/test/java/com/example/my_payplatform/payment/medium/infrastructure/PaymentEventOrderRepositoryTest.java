@@ -36,11 +36,9 @@ public class PaymentEventOrderRepositoryTest {
     @BeforeEach
     void init() {
         paymentEventJpaRepository.deleteAll();
-        paymentOrderJpaRepository.deleteAll();
     }
 
     @Test
-    @Transactional
     void PaymentEvent_및_PaymentOrder_저장_및_조회() {
         // given
         String checkoutId = "1";
@@ -59,7 +57,6 @@ public class PaymentEventOrderRepositoryTest {
                 .paymentOrderStatus(PaymentOrderStatus.EXECUTING)
                 .ledgerUpdated(false)
                 .walletUpdated(false)
-                .paymentEvent(paymentEvent)
                 .build();
         String paymentOrderId2 = "456";
         PaymentOrder paymentOrder2 = PaymentOrder.builder()
@@ -70,13 +67,12 @@ public class PaymentEventOrderRepositoryTest {
                 .paymentOrderStatus(PaymentOrderStatus.EXECUTING)
                 .ledgerUpdated(false)
                 .walletUpdated(false)
-                .paymentEvent(paymentEvent)
                 .build();
+        paymentEvent.getPaymentOrders().add(paymentOrder1);
+        paymentEvent.getPaymentOrders().add(paymentOrder2);
+
         // when
-        paymentEventRepository.save(paymentEvent);
-        paymentOrderRepository.save(paymentOrder1);
-        paymentOrderRepository.save(paymentOrder2);
-        em.flush();
+        PaymentEvent paymentEvent1 = paymentEventRepository.persistWithPaymentOrder(paymentEvent);
 
         // then
         PaymentEvent byCheckoutId = paymentEventRepository.findByCheckoutId(checkoutId);
@@ -88,7 +84,7 @@ public class PaymentEventOrderRepositoryTest {
     @Test
     void PaymentEvent_중복_저장_불가() {
         // given
-        String checkoutId = "1";
+        String checkoutId = "12";
         PaymentEvent paymentEvent = PaymentEvent.builder()
                 .checkoutId(checkoutId)
                 .buyerInfo("kim")

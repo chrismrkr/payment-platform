@@ -17,6 +17,7 @@ public class PaymentOrderEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "payment_event_id")
+    @Setter
     private PaymentEventEntity paymentEventEntity;
 
     @Enumerated(EnumType.STRING)

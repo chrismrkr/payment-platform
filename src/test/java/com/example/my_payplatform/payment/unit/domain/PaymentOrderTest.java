@@ -23,7 +23,6 @@ public class PaymentOrderTest {
                 .sellerInfo("1234")
                 .amount("1234")
                 .currency("1234")
-                .paymentEvent(paymentEvent)
                 .paymentOrderStatus(PaymentOrderStatus.NOT_STARTED)
                 .ledgerUpdated(false)
                 .walletUpdated(false)
@@ -38,7 +37,6 @@ public class PaymentOrderTest {
         Assertions.assertEquals(entity.getPaymentOrderStatus(), PaymentOrderStatus.NOT_STARTED);
         Assertions.assertEquals(entity.isLedgerUpdated(), false);
         Assertions.assertEquals(entity.isWalletUpdated(), false);
-        Assertions.assertEquals(entity.getPaymentEventEntity().getBuyerInfo(), "0000");
     }
     @Test
     void 엔티티를_도메인으로_변환() {

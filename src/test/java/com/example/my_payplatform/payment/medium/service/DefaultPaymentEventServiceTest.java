@@ -3,6 +3,7 @@ package com.example.my_payplatform.payment.medium.service;
 import com.example.my_payplatform.payment.controller.dto.PaymentEventReqDto;
 import com.example.my_payplatform.payment.domain.PaymentEvent;
 import com.example.my_payplatform.payment.domain.PaymentOrder;
+import com.example.my_payplatform.payment.domain.status.PaymentOrderStatus;
 import com.example.my_payplatform.payment.infrastructure.PaymentEventJpaRepository;
 import com.example.my_payplatform.payment.infrastructure.PaymentOrderJpaRepository;
 import com.example.my_payplatform.payment.service.impl.DefaultPaymentEventService;
@@ -11,12 +12,14 @@ import com.example.my_payplatform.payment.service.port.PaymentOrderRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
+import org.springframework.test.annotation.Rollback;
 
 import java.util.*;
 
@@ -36,13 +39,13 @@ public class DefaultPaymentEventServiceTest {
     @Autowired
     EntityManager em;
 
-    @BeforeEach
+    @AfterEach
     void DB_초기화() {
         paymentEventJpaRepository.deleteAll();
-        paymentOrderJpaRepository.deleteAll();
     }
 
     @Test
+    @Rollback
     void 결제이벤트_및_주문_시작_준비() {
         // given
         PaymentEventReqDto.PaymentOrderInfo farmerOrderInfo = PaymentEventReqDto.PaymentOrderInfo.builder()
@@ -73,9 +76,11 @@ public class DefaultPaymentEventServiceTest {
         Assertions.assertEquals("youShouldSetIdempotencyKeyByUUIDGenerator",
                 paymentEventRepository.findByCheckoutId("youShouldSetIdempotencyKeyByUUIDGenerator")
                         .getCheckoutId());
+        Assertions.assertEquals(2, paymentOrderRepository.findByCheckoutId("youShouldSetIdempotencyKeyByUUIDGenerator").size());
     }
 
     @Test
+    @Rollback
     void 결제_이벤트_및_주문_시작() {
         // given
         PaymentEventReqDto.PaymentOrderInfo farmerOrderInfo = PaymentEventReqDto.PaymentOrderInfo.builder()
@@ -97,7 +102,7 @@ public class DefaultPaymentEventServiceTest {
                 .creditCardInfo("PopularPSP-code99")
                 .paymentOrderInfos(paymentOrderInfoList)
                 .build();
-        paymentEventReqDto.setCheckoutId("youShouldSetIdempotencyKeyByUUIDGenerator");
+        paymentEventReqDto.setCheckoutId("youShouldSetIdempotencyKeyByUUIDGenerator2");
 
         PaymentEvent paymentEvent = defaultPaymentEventService.readyPayment(paymentEventReqDto);
 
@@ -106,6 +111,9 @@ public class DefaultPaymentEventServiceTest {
 
         // then
         Assertions.assertTrue(s.length() > 0);
+        for(PaymentOrder paymentOrder : paymentOrderRepository.findByCheckoutId("youShouldSetIdempotencyKeyByUUIDGenerator2")) {
+            Assertions.assertEquals(PaymentOrderStatus.EXECUTING, paymentOrder.getPaymentOrderStatus());
+        }
     }
 
     @Test

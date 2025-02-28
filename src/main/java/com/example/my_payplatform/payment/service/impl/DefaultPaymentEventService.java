@@ -96,7 +96,7 @@ public class DefaultPaymentEventService implements PaymentEventService {
                 .ledgerUpdated(false)
                 .walletUpdated(false)
                 .build();
-        paymentEvent.addPaymentOrder(paymentOrder);
+        paymentEvent.getPaymentOrders().add(paymentOrder);
     }
 
     public interface PaymentExecutor {

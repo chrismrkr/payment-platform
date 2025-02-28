@@ -22,10 +22,6 @@ public class PaymentEvent {
     @Setter
     private String paymentToken;
 
-    public void addPaymentOrder(PaymentOrder paymentOrder) {
-        this.paymentOrders.add(paymentOrder);
-    }
-
     @Builder
     public PaymentEvent(String checkoutId, String buyerInfo, String creditCardInfo, boolean isPaymentDone, String paymentToken) {
         this.checkoutId = checkoutId;

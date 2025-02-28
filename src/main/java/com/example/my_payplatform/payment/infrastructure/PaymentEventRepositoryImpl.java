@@ -35,8 +35,13 @@ public class PaymentEventRepositoryImpl implements PaymentEventRepository {
     @Override
     @Transactional
     public PaymentEvent persistWithPaymentOrder(PaymentEvent paymentEvent) {
-        PaymentEventEntity entity = paymentEvent.toEntity();
-        entityManager.persist(entity);
-        return PaymentEvent.from(entity);
+        PaymentEventEntity paymentEventEntity = paymentEvent.toEntity();
+        for(PaymentOrder paymentOrder : paymentEvent.getPaymentOrders()) {
+            PaymentOrderEntity paymentOrderEntity = paymentOrder.toEntity();
+            paymentEventEntity.getPaymentOrderEntities().add(paymentOrderEntity);
+            paymentOrderEntity.setPaymentEventEntity(paymentEventEntity);
+        }
+        entityManager.persist(paymentEventEntity);
+        return PaymentEvent.fromWithPaymentOrder(paymentEventEntity);
     }
 }
