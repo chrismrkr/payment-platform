@@ -26,19 +26,18 @@ public class DefaultPaymentEventService implements PaymentEventService {
     private final ApplicationContext applicationContext;
 
     @Override
-    public PaymentEvent readyPaymentEvent(PaymentEventReqDto paymentEventReqDto) {
-        PaymentEvent paymentEvent = persistPaymentEvent(paymentEventReqDto);
-        return paymentEvent;
-    }
-
-    @Override
-    public void readyPaymentOrder(PaymentEvent paymentEvent, PaymentEventReqDto paymentEventReqDto) {
+    @Transactional
+    public PaymentEvent readyPayment(PaymentEventReqDto paymentEventReqDto) {
+        PaymentEvent paymentEvent = createPaymentEvent(paymentEventReqDto);
         paymentEventReqDto.getPaymentOrderInfos()
                 .forEach(paymentOrderInfo -> {
                     paymentOrderInfo.setPaymentOrderId(UniqueIDGenerator.getId());
-                    persistPaymentOrder(paymentOrderInfo, paymentEvent);
+                    addPaymentOrder(paymentOrderInfo, paymentEvent);
                 });
+        paymentEventRepository.persistWithPaymentOrder(paymentEvent);
+        return paymentEvent;
     }
+
 
     @Override
     @Transactional
@@ -77,17 +76,17 @@ public class DefaultPaymentEventService implements PaymentEventService {
         }
     }
 
-    private PaymentEvent persistPaymentEvent(PaymentEventReqDto dto) {
+    private PaymentEvent createPaymentEvent(PaymentEventReqDto dto) {
         PaymentEvent paymentEvent = PaymentEvent.builder()
                 .checkoutId(dto.getCheckoutId())
                 .buyerInfo(dto.getBuyerInfo())
                 .creditCardInfo(dto.getCreditCardInfo())
                 .isPaymentDone(false)
                 .build();
-        return paymentEventRepository.persist(paymentEvent);
+        return paymentEvent;
     }
 
-    private PaymentOrder persistPaymentOrder(PaymentEventReqDto.PaymentOrderInfo paymentOrderInfo, PaymentEvent paymentEvent) {
+    private void addPaymentOrder(PaymentEventReqDto.PaymentOrderInfo paymentOrderInfo, PaymentEvent paymentEvent) {
         PaymentOrder paymentOrder = PaymentOrder.builder()
                 .paymentOrderId(paymentOrderInfo.getPaymentOrderId())
                 .sellerInfo(paymentOrderInfo.getSellerInfo())
@@ -96,10 +95,8 @@ public class DefaultPaymentEventService implements PaymentEventService {
                 .paymentOrderStatus(PaymentOrderStatus.NOT_STARTED)
                 .ledgerUpdated(false)
                 .walletUpdated(false)
-                .paymentEvent(paymentEvent)
                 .build();
-        paymentOrder = paymentOrderRepository.persist(paymentOrder);
-        return paymentOrder;
+        paymentEvent.addPaymentOrder(paymentOrder);
     }
 
     public interface PaymentExecutor {

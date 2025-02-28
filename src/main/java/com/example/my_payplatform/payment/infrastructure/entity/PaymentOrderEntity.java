@@ -2,10 +2,7 @@ package com.example.my_payplatform.payment.infrastructure.entity;
 
 import com.example.my_payplatform.payment.domain.status.PaymentOrderStatus;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
@@ -29,7 +26,7 @@ public class PaymentOrderEntity {
 
 
     @Builder
-    private PaymentOrderEntity(String paymentOrderId, String sellerInfo, String amount, String currency, PaymentEventEntity paymentEventEntity, PaymentOrderStatus paymentOrderStatus, boolean ledgerUpdated, boolean walletUpdated) {
+    public PaymentOrderEntity(String paymentOrderId, String sellerInfo, String amount, String currency, PaymentEventEntity paymentEventEntity, PaymentOrderStatus paymentOrderStatus, boolean ledgerUpdated, boolean walletUpdated) {
         this.paymentOrderId = paymentOrderId;
         this.sellerInfo = sellerInfo;
         this.amount = amount;

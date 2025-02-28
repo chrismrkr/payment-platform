@@ -102,10 +102,10 @@ public class PaymentEventOrderRepositoryTest {
                 .isPaymentDone(false)
                 .build();
         // when
-        paymentEventRepository.persist(paymentEvent);
+        paymentEventRepository.persistWithPaymentOrder(paymentEvent);
         // then
         Assertions.assertThrows(DataIntegrityViolationException.class,
-                () -> paymentEventRepository.persist(paymentEvent2));
+                () -> paymentEventRepository.persistWithPaymentOrder(paymentEvent2));
     }
 
 }

@@ -5,8 +5,7 @@ import com.example.my_payplatform.payment.controller.dto.PaymentEventWebhookReqD
 import com.example.my_payplatform.payment.domain.PaymentEvent;
 
 public interface PaymentEventService {
-    PaymentEvent readyPaymentEvent(PaymentEventReqDto paymentEventReqDto);
-    void readyPaymentOrder(PaymentEvent paymentEvent, PaymentEventReqDto paymentEventReqDto);
+    PaymentEvent readyPayment(PaymentEventReqDto paymentEventReqDto);
     String executePayment(PaymentEventReqDto paymentEventReqDto);
     void handleWebhook(PaymentEventWebhookReqDto webhookEvent);
 }

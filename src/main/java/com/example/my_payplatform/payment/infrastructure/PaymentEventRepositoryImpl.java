@@ -1,12 +1,16 @@
 package com.example.my_payplatform.payment.infrastructure;
 
 import com.example.my_payplatform.payment.domain.PaymentEvent;
+import com.example.my_payplatform.payment.domain.PaymentOrder;
 import com.example.my_payplatform.payment.infrastructure.entity.PaymentEventEntity;
+import com.example.my_payplatform.payment.infrastructure.entity.PaymentOrderEntity;
 import com.example.my_payplatform.payment.service.port.PaymentEventRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
@@ -30,7 +34,7 @@ public class PaymentEventRepositoryImpl implements PaymentEventRepository {
 
     @Override
     @Transactional
-    public PaymentEvent persist(PaymentEvent paymentEvent) {
+    public PaymentEvent persistWithPaymentOrder(PaymentEvent paymentEvent) {
         PaymentEventEntity entity = paymentEvent.toEntity();
         entityManager.persist(entity);
         return PaymentEvent.from(entity);

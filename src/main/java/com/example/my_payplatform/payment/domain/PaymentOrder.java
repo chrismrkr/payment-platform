@@ -5,6 +5,7 @@ import com.example.my_payplatform.payment.infrastructure.entity.PaymentEventEnti
 import com.example.my_payplatform.payment.infrastructure.entity.PaymentOrderEntity;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 public class PaymentOrder {
@@ -16,7 +17,7 @@ public class PaymentOrder {
     private boolean ledgerUpdated;
     private boolean walletUpdated;
 
-    private final PaymentEvent paymentEvent;
+    private PaymentEvent paymentEvent;
 
     public void changeStatus(PaymentOrderStatus status) {
         this.paymentOrderStatus = status;
@@ -27,53 +28,29 @@ public class PaymentOrder {
     public void successWalletUpdate() {
         this.walletUpdated = true;
     }
+
     @Builder
-    public PaymentOrder(String paymentOrderId, String sellerInfo, String amount, String currency, PaymentEvent paymentEvent, PaymentOrderStatus paymentOrderStatus, boolean ledgerUpdated, boolean walletUpdated) {
+    public PaymentOrder(String paymentOrderId, String sellerInfo, String amount, String currency, PaymentOrderStatus paymentOrderStatus, boolean ledgerUpdated, boolean walletUpdated, PaymentEvent paymentEvent) {
         this.paymentOrderId = paymentOrderId;
         this.sellerInfo = sellerInfo;
         this.amount = amount;
         this.currency = currency;
-        this.paymentEvent = paymentEvent;
         this.paymentOrderStatus = paymentOrderStatus;
         this.ledgerUpdated = ledgerUpdated;
         this.walletUpdated = walletUpdated;
+        this.paymentEvent = paymentEvent;
     }
 
-    public static PaymentOrder from(PaymentOrderEntity entity) {
-        return PaymentOrder.builder()
-                .paymentOrderId(entity.getPaymentOrderId())
-                .sellerInfo(entity.getSellerInfo())
-                .amount(entity.getAmount())
-                .currency(entity.getCurrency())
-                .paymentEvent(PaymentEvent.from(
-                        entity.getPaymentEventEntity())
-                )
-                .paymentOrderStatus(entity.getPaymentOrderStatus())
-                .ledgerUpdated(entity.isLedgerUpdated())
-                .walletUpdated(entity.isWalletUpdated())
-                .build();
-    }
-    public static PaymentOrder fromWithoutPaymentEvent(PaymentOrderEntity entity) {
-        return PaymentOrder.builder()
-                .paymentOrderId(entity.getPaymentOrderId())
-                .sellerInfo(entity.getSellerInfo())
-                .amount(entity.getAmount())
-                .currency(entity.getCurrency())
-                .paymentOrderStatus(entity.getPaymentOrderStatus())
-                .ledgerUpdated(entity.isLedgerUpdated())
-                .walletUpdated(entity.isWalletUpdated())
-                .build();
-    }
     public PaymentOrderEntity toEntity() {
         return PaymentOrderEntity.builder()
-                .paymentOrderId(this.getPaymentOrderId())
-                .sellerInfo(this.getSellerInfo())
-                .amount(this.getAmount())
-                .currency(this.getCurrency())
-                .paymentEventEntity(this.getPaymentEvent().toEntity())
-                .paymentOrderStatus(this.getPaymentOrderStatus())
-                .ledgerUpdated(this.isLedgerUpdated())
-                .walletUpdated(this.isWalletUpdated())
+                .paymentOrderId()
+                .sellerInfo()
+                .paymentOrderStatus()
+                .amount()
+                .currency()
+                .ledgerUpdated()
+                .walletUpdated()
                 .build();
     }
+    public PaymentOrderEntity toEntityWith
 }

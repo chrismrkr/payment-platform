@@ -5,5 +5,5 @@ import com.example.my_payplatform.payment.domain.PaymentEvent;
 public interface PaymentEventRepository {
     PaymentEvent findByCheckoutId(String checkoutId);
     PaymentEvent save(PaymentEvent paymentEvent);
-    PaymentEvent persist(PaymentEvent paymentEvent);
+    PaymentEvent persistWithPaymentOrder(PaymentEvent paymentEvent);
 }

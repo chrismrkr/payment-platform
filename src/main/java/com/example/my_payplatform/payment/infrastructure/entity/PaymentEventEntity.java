@@ -21,7 +21,7 @@ public class PaymentEventEntity {
     private boolean isPaymentDone;
     private String paymentToken;
 
-    @OneToMany(mappedBy = "paymentEventEntity", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "paymentEventEntity", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private Set<PaymentOrderEntity> paymentOrderEntities = new HashSet<>();
 
     @Builder

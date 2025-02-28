@@ -67,8 +67,7 @@ public class DefaultPaymentEventServiceTest {
         // when
         paymentEventReqDto.setCheckoutId("youShouldSetIdempotencyKeyByUUIDGenerator");
 
-        PaymentEvent paymentEvent = defaultPaymentEventService.readyPaymentEvent(paymentEventReqDto);
-        defaultPaymentEventService.readyPaymentOrder(paymentEvent, paymentEventReqDto);
+        PaymentEvent paymentEvent = defaultPaymentEventService.readyPayment(paymentEventReqDto);
 
         // then
         Assertions.assertEquals("youShouldSetIdempotencyKeyByUUIDGenerator",
@@ -100,8 +99,7 @@ public class DefaultPaymentEventServiceTest {
                 .build();
         paymentEventReqDto.setCheckoutId("youShouldSetIdempotencyKeyByUUIDGenerator");
 
-        PaymentEvent paymentEvent = defaultPaymentEventService.readyPaymentEvent(paymentEventReqDto);
-        defaultPaymentEventService.readyPaymentOrder(paymentEvent, paymentEventReqDto); // 결제 이벤트 및 주문 준비 완료
+        PaymentEvent paymentEvent = defaultPaymentEventService.readyPayment(paymentEventReqDto);
 
         // when
         String s = defaultPaymentEventService.executePayment(paymentEventReqDto);
