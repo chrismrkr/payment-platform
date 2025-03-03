@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>결제 성공</title>
+    <style>
+        body {
+            background-color: #4da6ff; /* 밝은 파란색 */
+            text-align: center;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        h1 {
+            color: white;
+            font-size: 48px;
+        }
+
+        /* 폭죽 효과 */
+        .firework {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: yellow;
+            border-radius: 50%;
+            opacity: 0;
+            animation: explode 1s ease-out infinite;
+        }
+
+        @keyframes explode {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--x), var(--y)) scale(2);
+            }
+        }
+    </style>
+    <script>
+        function createFirework() {
+            const firework = document.createElement("div");
+            firework.className = "firework";
+            document.body.appendChild(firework);
+
+            firework.style.setProperty("--x", `${Math.random() * 400 - 200}px`);
+            firework.style.setProperty("--y", `${Math.random() * 300 - 150}px`);
+            firework.style.left = `${window.innerWidth / 2}px`;
+            firework.style.top = `${window.innerHeight / 2}px`;
+
+            setTimeout(() => firework.remove(), 1000);
+        }
+
+        setInterval(createFirework, 300);
+    </script>
+</head>
+<body>
+
+<h1>🎉 결제 성공! 🎉</h1>
+
+</body>
+</html>

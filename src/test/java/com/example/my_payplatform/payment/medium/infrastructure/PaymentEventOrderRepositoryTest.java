@@ -7,6 +7,7 @@ import com.example.my_payplatform.payment.infrastructure.PaymentEventJpaReposito
 import com.example.my_payplatform.payment.infrastructure.PaymentOrderJpaRepository;
 import com.example.my_payplatform.payment.service.port.PaymentEventRepository;
 import com.example.my_payplatform.payment.service.port.PaymentOrderRepository;
+import com.example.my_payplatform.payment.utils.UniqueIDGenerator;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
@@ -70,6 +72,8 @@ public class PaymentEventOrderRepositoryTest {
                 .build();
         paymentEvent.getPaymentOrders().add(paymentOrder1);
         paymentEvent.getPaymentOrders().add(paymentOrder2);
+        paymentOrder1.setPaymentEvent(paymentEvent);
+        paymentOrder2.setPaymentEvent(paymentEvent);
 
         // when
         PaymentEvent paymentEvent1 = paymentEventRepository.persistWithPaymentOrder(paymentEvent);
@@ -104,4 +108,23 @@ public class PaymentEventOrderRepositoryTest {
                 () -> paymentEventRepository.persistWithPaymentOrder(paymentEvent2));
     }
 
+    @Test
+    void PaymentEvent를_PaymentToken으로_조회() {
+        // given
+        String checkoutId = "13";
+        String paymentToken = UniqueIDGenerator.getId();
+        PaymentEvent paymentEvent = PaymentEvent.builder()
+                .checkoutId(checkoutId)
+                .buyerInfo("kim")
+                .creditCardInfo("abcCard123")
+                .isPaymentDone(false)
+                .paymentToken(paymentToken)
+                .build();
+        paymentEventRepository.save(paymentEvent);
+        // when
+        PaymentEvent findByPaymentToken = paymentEventRepository.findByPaymentToken(paymentToken);
+        // then
+        Assertions.assertEquals(paymentToken, findByPaymentToken.getPaymentToken());
+        Assertions.assertEquals(checkoutId, findByPaymentToken.getCheckoutId());
+    }
 }

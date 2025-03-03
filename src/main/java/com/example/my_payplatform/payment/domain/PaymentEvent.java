@@ -22,6 +22,10 @@ public class PaymentEvent {
     @Setter
     private String paymentToken;
 
+    public void donePayment() {
+        this.isPaymentDone = true;
+    }
+
     @Builder
     public PaymentEvent(String checkoutId, String buyerInfo, String creditCardInfo, boolean isPaymentDone, String paymentToken) {
         this.checkoutId = checkoutId;
@@ -60,6 +64,7 @@ public class PaymentEvent {
         entity.getPaymentOrderEntities().forEach(paymentOrderEntity -> {
             PaymentOrder paymentOrder = PaymentOrder.from(paymentOrderEntity);
             paymentEvent.getPaymentOrders().add(paymentOrder);
+            paymentOrder.setPaymentEvent(paymentEvent);
         });
         return paymentEvent;
     }

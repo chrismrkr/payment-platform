@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>결제 진행 중...</title>
+    <style>
+        body {
+            background-color: #4da6ff; /* 밝은 파란색 */
+            text-align: center;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 5px solid white;
+            border-top: 5px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        h2 {
+            color: white;
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        let attempt = 0;
+        const maxAttempts = 10; // 최대 10번 요청
+
+        function checkPaymentStatus() {
+            const paymentToken = new URLSearchParams(window.location.search).get("paymentToken");
+
+            fetch(`/api/payment?paymentToken=${paymentToken}`)
+                .then(response => {
+                    if (response.redirected) {
+                        window.location.href = response.url; // 302 리다이렉트 처리
+                    } else {
+                        return response.json();
+                    }
+                })
+                .catch(error => console.error("결제 상태 확인 중 오류 발생:", error));
+            attempt++;
+        }
+
+        const pollingInterval = setInterval(() => {
+            if (attempt < maxAttempts) {
+                checkPaymentStatus();
+            } else {
+                clearInterval(pollingInterval);
+            }
+        }, 3000); // 3초마다 결제 상태 확인
+    </script>
+</head>
+<body>
+
+<div class="loader"></div>
+<h2>결제 진행 중...</h2>
+
+</body>
+</html>

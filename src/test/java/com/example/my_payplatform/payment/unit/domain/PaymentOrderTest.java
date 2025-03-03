@@ -28,6 +28,7 @@ public class PaymentOrderTest {
                 .walletUpdated(false)
                 .build();
         // when
+        paymentOrder.setPaymentEvent(paymentEvent);
         PaymentOrderEntity entity = paymentOrder.toEntity();
         // then
         Assertions.assertEquals(entity.getPaymentOrderId(), "1234");
@@ -57,7 +58,7 @@ public class PaymentOrderTest {
                 .walletUpdated(false)
                 .build();
         // when
-        PaymentOrder paymentOrder = PaymentOrder.from(paymentOrderEntity);
+        PaymentOrder paymentOrder = PaymentOrder.fromWithPaymentEvent(paymentOrderEntity);
         // then
         Assertions.assertEquals(paymentOrder.getPaymentOrderId(), "1234");
         Assertions.assertEquals(paymentOrder.getSellerInfo(), "1234");

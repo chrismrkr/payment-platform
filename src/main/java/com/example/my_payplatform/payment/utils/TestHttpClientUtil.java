@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-@Component
+//@Component
 public class TestHttpClientUtil implements HttpClientUtil{
     @Override
     public <T> ResponseEntity<T> get(String url, Class<T> responseType, Map<String, String> headers, MediaType mediaType) {

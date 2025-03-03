@@ -42,7 +42,7 @@ public class PaymentOrder {
     }
 
     public PaymentOrderEntity toEntity() {
-        return PaymentOrderEntity.builder()
+        PaymentOrderEntity entity = PaymentOrderEntity.builder()
                 .paymentOrderId(this.getPaymentOrderId())
                 .sellerInfo(this.getSellerInfo())
                 .paymentOrderStatus(this.getPaymentOrderStatus())
@@ -51,6 +51,8 @@ public class PaymentOrder {
                 .ledgerUpdated(this.isLedgerUpdated())
                 .walletUpdated(this.isWalletUpdated())
                 .build();
+        entity.setPaymentEventEntity(this.getPaymentEvent().toEntity());
+        return entity;
     }
     public static PaymentOrder from(PaymentOrderEntity entity) {
         return PaymentOrder.builder()

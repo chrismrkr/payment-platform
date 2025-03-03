@@ -8,8 +8,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 
-//@Component
-//@RequiredArgsConstructor
+@Component
+@RequiredArgsConstructor
 public class SyncHttpClientUtil implements HttpClientUtil {
     private final RestTemplate restTemplate = new RestTemplate();
     @Override

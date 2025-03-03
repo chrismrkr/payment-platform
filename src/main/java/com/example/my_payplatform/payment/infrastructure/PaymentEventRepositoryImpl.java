@@ -26,6 +26,20 @@ public class PaymentEventRepositoryImpl implements PaymentEventRepository {
     }
 
     @Override
+    public PaymentEvent findByPaymentTokenWithPaymentOrder(String paymentToken) {
+        PaymentEventEntity paymentEventEntity = jpaRepository.findByPaymentTokenWithPaymentOrder(paymentToken)
+                .orElseThrow(() -> new IllegalArgumentException("PaymentEvent Not Found"));
+        return PaymentEvent.fromWithPaymentOrder(paymentEventEntity);
+    }
+
+    @Override
+    public PaymentEvent findByPaymentToken(String paymentToken) {
+        PaymentEventEntity paymentEventEntity = jpaRepository.findByPaymentToken(paymentToken)
+                .orElseThrow(() -> new IllegalArgumentException("PaymentEvent Not Found"));
+        return PaymentEvent.from(paymentEventEntity);
+    }
+
+    @Override
     public PaymentEvent save(PaymentEvent paymentEvent) {
         PaymentEventEntity entity = paymentEvent.toEntity();
         PaymentEventEntity save = jpaRepository.save(entity);

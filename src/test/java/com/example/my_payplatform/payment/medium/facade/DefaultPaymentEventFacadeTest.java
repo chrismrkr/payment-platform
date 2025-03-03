@@ -57,4 +57,14 @@ public class DefaultPaymentEventFacadeTest {
         // then
         Assertions.assertTrue(redirectURL.length() > 0);
     }
+
+    @Test
+    void 결제_성공_결과_조회() {
+
+    }
+
+    @Test
+    void 결제_실패_결과_조회() {
+
+    }
 }
