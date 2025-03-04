@@ -1,0 +1,48 @@
+services:
+  payment-example-nginx:
+    image: nginx:latest
+    container_name: payment-example-nginx
+    volumes:
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "80:80"
+    depends_on:
+      - pay-platform-was
+      - pg-was
+
+  pay-platform-was:
+    image: pay-platform-was:latest
+    container_name: pay-platform-was
+    ports:
+      - "8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://payment-db:3306/edu?useSSL=false&allowPublicKeyRetrieval=true
+      PAYMENT-SUCCESS_URL: http://127.0.0.1/payment/success
+      PAYMENT-FAILURE_URL: http://127.0.0.1/payment/failure
+      PAYMENT-ALREADY_URL: http://127.0.0.1/payment/already
+      POPULARPSP_API-SERVER_URL: http://payment-example-nginx/pg/api/payment/enroll
+      POPULARPSP_PAY-PAGE_URL: http://127.0.0.1/pg/payment
+      POPULARPSP_REDIRECT_URL: http://127.0.0.1/payment/result
+
+    depends_on:
+      - payment-db
+    restart: always
+
+  pg-was:
+    image: pg-was:latest
+    container_name: pg-was
+    ports:
+      - "8080"
+    environment:
+      WEBHOOK_URL: http://payment-example-nginx/api/payment/webhook
+      URL_INVALID-ACCESS: http://127.0.0.1/pg/payment/error
+
+  payment-db:
+    image: mysql:latest
+    container_name: payment-db
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_USER=root
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_DATABASE=edu
